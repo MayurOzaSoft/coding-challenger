@@ -79,4 +79,5 @@ class BookingControllerTest {
                 .andExpect(jsonPath("$.premiumRoomsIncome", is(1153)))
                 .andExpect(jsonPath("$.economyRoomsIncome", is(45)));
     }
+
 }

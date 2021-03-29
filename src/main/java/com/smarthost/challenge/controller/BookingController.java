@@ -1,6 +1,7 @@
 package com.smarthost.challenge.controller;
 
 import com.smarthost.challenge.ChallengeApplication;
+import com.smarthost.challenge.exception.BookingException;
 import com.smarthost.challenge.model.BookingRequestDTO;
 import com.smarthost.challenge.model.BookingResponseDTO;
 import com.smarthost.challenge.service.BookingService;
@@ -31,12 +32,18 @@ public class BookingController {
             @RequestParam("availableEconomyRooms") int availableEconomyRooms
             ){
 
+        // validate params
+        if(availablePremiumRooms <= 0 || availableEconomyRooms <= 0)
+            throw new BookingException("Invalid Inputs, Enter positive non-zero value and execute again.");
+
+        // Build request
         BookingRequestDTO bookingRequestDTO = BookingRequestDTO.builder()
                 .availableEconomy(availableEconomyRooms)
                 .availablePremium(availablePremiumRooms)
                 .guests(BookingUtility.guestJSON)
                 .build();
 
+        // Call service
         BookingResponseDTO bookingResponseDTO = bookingService.bookingOccupancy(bookingRequestDTO);
 
         return ResponseEntity.ok(bookingResponseDTO);
